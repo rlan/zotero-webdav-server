@@ -1,0 +1,51 @@
+services:
+
+  tailscale:
+    image: tailscale/tailscale:stable
+    # "hostname" appears as the device name in the Tailscale network.
+    # For example, "my-service.my-tailscale-network.ts.net".
+    # This domain name is used in "Caddyfile".
+    hostname: zstore
+    environment:
+      # Tailscale OAuth secret.
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=${TS_EXTRA_ARGS}
+      # Tailscale state dir
+      - TS_STATE_DIR=/var/lib/tailscale
+    volumes:
+      # See "volumes:" below for details.
+      - ts-lib-var:/var/lib/tailscale
+      - ts-run-var:/var/run/tailscale
+      - ts-tmp:/tmp
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - sys_module
+    restart: unless-stopped
+
+  caddy:
+    # Builds a container. See Dockefile.
+    build: .
+    container_name: caddy
+    restart: unless-stopped
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ts-run-var:/var/run/tailscale
+      - ts-tmp:/tmp
+      - ./webdav:/srv
+    depends_on:
+      - tailscale
+    network_mode: service:tailscale
+
+volumes:
+  # Tailscale state dir.
+  ts-lib-var:
+    driver: local
+  # For "/var/run/tailscale/tailscaled.sock".
+  # Shared between tailscale and caddy containers.
+  ts-run-var:
+    driver: local
+  # For "/tmp/tailscaled.sock" because "/var/run/tailscale/tailscaled.sock" is symlinked to it.
+  # Shared between tailscale and caddy containers.
+  ts-tmp:
+    driver: local

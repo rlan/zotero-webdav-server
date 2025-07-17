@@ -1,0 +1,21 @@
+{
+	order webdav before file_server
+}
+
+https://zstore.magicdns.ts.net {
+
+	handle_path /zotero/* {
+
+		basic_auth {	
+			username "hashed.password"
+		}
+	
+		webdav {
+			root /srv/zotero
+		}
+	}
+
+	log {
+		output stdout
+	}
+}
