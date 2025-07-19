@@ -2,12 +2,12 @@
 	order webdav before file_server
 }
 
-https://zstore.magicdns.ts.net {
+https://{$MY_SERVICE}.{$MY_DOMAIN}.ts.net {
 
 	handle_path /zotero/* {
 
 		basic_auth {	
-			username "hashed.password"
+			{$MY_USERNAME} {$MY_HASHED_PASSWORD}
 		}
 	
 		webdav {
@@ -17,5 +17,6 @@ https://zstore.magicdns.ts.net {
 
 	log {
 		output stdout
+		level ERROR
 	}
 }
