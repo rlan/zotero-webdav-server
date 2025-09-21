@@ -37,6 +37,9 @@ services:
       - ts-run-var:/var/run/tailscale
       - ts-tmp:/tmp
       - ./webdav:/srv
+    # Make sure there is a 'zotero' subfolder in './webdav'.
+    # This is a hardcoded name in Zotero sync settings.
+    # Files for WebDAV are stored there. See webdav root in Caddyfile.
     depends_on:
       - tailscale
     network_mode: service:tailscale
