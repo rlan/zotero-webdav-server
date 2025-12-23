@@ -9,7 +9,7 @@ Tech stack:
 - [docker](https://www.docker.com/)
 - [Tailscale](https://tailscale.com/)
 
-For details, see this blog [post](https://ricklan.net/blog/2025/07/self-host-file-syncing-for-zotero-using-webdav/).
+For instructions, see this blog [post](https://ricklan.net/blog/2025/07/self-host-file-syncing-for-zotero-using-webdav/).
 
 ## License
 
